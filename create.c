@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:17:51 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/01 11:29:17 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:21:20 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ pthread_mutex_t	*create_locks(int len)
 void	delete_locks(pthread_mutex_t *locks, int len)
 {
 	int	i;
-	int	check;
 
 	i = 0;
 	while (i < len)
@@ -66,15 +65,13 @@ void	create_threads(t_info *info)
 	i = 0;
 	while (i < info->n_philo)
 	{
-		pthread_create(info->threads[i], NULL, &routine, (void *) info);
-		printf("Creating Thread: %d\n", i);
+		pthread_create(&info->threads[i], NULL, &routine, (void *) &info->philo[i]);
 		i++;
 	}
 	i = 0;
 	while (i < info->n_philo)
 	{
 		pthread_join(info->threads[i], NULL);
-		printf("Ending Thread: %d\n", i);
 		i++;
 	}
 }
@@ -122,5 +119,6 @@ void	parse_info_to_philo(char *argv[], t_info *info)
 			info->philo[i].max_meals = -1;
 		else
 			info->philo[i].max_meals = atoi(argv[5]);
+		i++;
 	}
 }

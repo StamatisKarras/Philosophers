@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:00:27 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/01 11:30:30 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/02 12:19:47 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <unistd.h>
 
 typedef struct s_philo
 {
@@ -28,6 +29,8 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
+	struct			timeval start;
+	struct			timeval last_meal;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 }	t_philo;
@@ -48,5 +51,9 @@ void			delete_locks(pthread_mutex_t *locks, int len);
 void			create_threads(t_info *info);
 int				philoshophers(t_info *info, char *argv[]);
 void			parse_info_to_philo(char *argv[], t_info *info);
+void			*routine(void *arg);
+long	ms_calc(struct timeval *start, struct timeval *end);
+void	eat(t_philo *philo);
+void	odd(t_philo *philo);
 
 #endif

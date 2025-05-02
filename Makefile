@@ -3,7 +3,9 @@ FLAGS = -Wall -Wextra -Werror -g
 NAME = philosophers
 
 SRC = main.c \
-	  create.c
+	  create.c \
+	  routines.c \
+	  philo_states.c
 OBJ = $(SRC:.c=.o)
 
 .SILENT:

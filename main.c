@@ -6,20 +6,11 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:06:29 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/01 11:45:49 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/02 11:29:30 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	*routine(void *arg)
-{
-	t_info	*info;
-
-	info = (t_info *) arg;
-	
-	return (NULL);
-}
 
 int	philoshophers(t_info *info, char *argv[])
 {
