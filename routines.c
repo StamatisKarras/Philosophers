@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/02 12:20:55 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/05 12:10:07 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,29 @@
 void	*routine(void *arg)
 {
 	t_philo			*philo;
+	struct timeval 		tv;
 
 	philo = (t_philo *) arg;
-	//if (philo->id % 2 != 0)
-	odd(philo);
-	//else
-	//	even();
+	while (philo->sync == 0)
+		usleep(0);
+	gettimeofday(&tv, NULL);
+	philo->start = tv;
+	actions(philo);
 	return (NULL);
 }
 
-void	odd(t_philo *philo)
+void	actions(t_philo *philo)
 {
-	eat(philo);
-	//sleep();
-	//think();
+	int	i;
+
+	i = 0;
+	if (philo->id % 2 != 0 || philo->odd == 1)
+			think(philo);
+	while(i < 10)
+	{
+		eat(philo);
+		p_sleep(philo);
+		think(philo);
+		i++;
+	}
 }

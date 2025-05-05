@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:17:51 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/02 12:21:20 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/05 12:17:41 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,16 @@ void	delete_locks(pthread_mutex_t *locks, int len)
 
 void	create_threads(t_info *info)
 {
-	int	i;
+	int				i;
 
 	i = 0;
+	info->sync = 0;
 	while (i < info->n_philo)
 	{
 		pthread_create(&info->threads[i], NULL, &routine, (void *) &info->philo[i]);
 		i++;
 	}
+	info->sync = 1;
 	i = 0;
 	while (i < info->n_philo)
 	{
@@ -92,13 +94,15 @@ void	assign_locks(t_info *info)
 	int	i;
 
 	i = 0;
+	pthread_mutex_init(&info->print_lock, NULL);
 	while (i < info->n_philo)
 	{
 		info->philo[i].right = &info->locks[i];
 		if (i - 1 < 0)
-			info->philo[i].left = &info->locks[info->n_philo];
+			info->philo[i].left = &info->locks[info->n_philo - 1];
 		else
 			info->philo[i].left = &info->locks[i - 1];
+		info->philo[i].print_lock = &info->print_lock;
 		i++;
 	}
 }
@@ -115,6 +119,11 @@ void	parse_info_to_philo(char *argv[], t_info *info)
 		info->philo[i].time_to_die = atoi(argv[2]);
 		info->philo[i].time_to_eat = atoi(argv[3]);
 		info->philo[i].time_to_sleep = atoi(argv[4]);
+		info->philo[i].sync = &info->sync;
+		if (i == info->n_philo - 1 && info->n_philo % 2 != 0)
+			info->philo[i].odd = 1;
+		else
+			info->philo[i].odd = 0;
 		if (!argv[5])
 			info->philo[i].max_meals = -1;
 		else
