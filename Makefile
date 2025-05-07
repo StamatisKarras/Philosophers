@@ -5,7 +5,8 @@ NAME = philosophers
 SRC = main.c \
 	  create.c \
 	  routines.c \
-	  philo_states.c
+	  philo_states.c \
+	  helper.c
 OBJ = $(SRC:.c=.o)
 
 .SILENT:

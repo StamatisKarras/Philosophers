@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:06:29 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/02 11:29:30 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:55:58 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	philoshophers(t_info *info, char *argv[])
 		return (-1);
 	create_threads(info);
 	delete_locks(info->locks, info->n_philo);
+	free_everything(info);
 	return (0);
 }
 

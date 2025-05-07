@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/05 12:10:07 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/07 12:22:46 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,48 @@ void	*routine(void *arg)
 	while (philo->sync == 0)
 		usleep(0);
 	gettimeofday(&tv, NULL);
+	gettimeofday(&philo->last_meal, NULL);
 	philo->start = tv;
 	actions(philo);
 	return (NULL);
 }
 
-void	actions(t_philo *philo)
+void	*monitor(void *arg)
 {
-	int	i;
+	t_info	*info;
+	int		i;
 
 	i = 0;
+	info = (t_info *) arg;
+	while (info->sync == 0)
+		usleep(0);
+	usleep(2 * 1000);
+	while (1)
+	{
+		if (i == info->n_philo - 1)
+			i = 0;
+		if (is_dead(&info->philo[i]) == -1)
+		{
+			info->sync = -1;
+			pthread_mutex_lock(&info->print_lock);
+			death_message(&info->philo[i]);
+			pthread_mutex_unlock(&info->print_lock);
+			break ;
+		}
+	}
+	return (NULL);
+}
+
+void	actions(t_philo *philo)
+{
 	if (philo->id % 2 != 0 || philo->odd == 1)
 			think(philo);
-	while(i < 10)
+	while(1)
 	{
 		eat(philo);
 		p_sleep(philo);
 		think(philo);
-		i++;
+		if (*philo->sync == -1)
+			break ;
 	}
 }

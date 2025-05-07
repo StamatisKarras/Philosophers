@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:17:51 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/05 12:17:41 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:59:42 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	create_threads(t_info *info)
 
 	i = 0;
 	info->sync = 0;
+	pthread_create(&info->all_seeing, NULL, &monitor, (void *) info);
+	pthread_detach(info->all_seeing);
 	while (i < info->n_philo)
 	{
 		pthread_create(&info->threads[i], NULL, &routine, (void *) &info->philo[i]);

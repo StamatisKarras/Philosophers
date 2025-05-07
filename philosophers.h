@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:00:27 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/05 12:09:45 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/07 11:52:14 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_info
 	pthread_mutex_t	print_lock;
 	t_philo			*philo;
 	pthread_t		*threads;
+	pthread_t		all_seeing;
 	int				n_philo;
 	int				sync;
 }	t_info;
@@ -62,5 +63,10 @@ void	eat(t_philo *philo);
 void	actions(t_philo *philo);
 void	p_sleep(t_philo *philo);
 void	think(t_philo *philo);
+void	message(char *message, t_philo *philo);
+void	*monitor(void *arg);
+int	is_dead(t_philo *philo);
+void	death_message(t_philo *philo);
+void	free_everything(t_info *info);
 
 #endif
