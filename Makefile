@@ -6,7 +6,9 @@ SRC = main.c \
 	  create.c \
 	  routines.c \
 	  philo_states.c \
-	  helper.c
+	  helper.c \
+	  assign_parse.c \
+	  free.c
 OBJ = $(SRC:.c=.o)
 
 .SILENT:

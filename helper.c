@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:09:12 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/07 11:40:00 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/08 13:19:04 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	is_dead(t_philo *philo)
 	long			ms;
 	struct timeval	tv;
 
+	if (philo->meals_eaten == philo->max_meals)
+		return (0);
 	gettimeofday(&tv, NULL);
 	ms = ms_calc(&philo->last_meal, &tv);
 	if (ms >= philo->time_to_die)
@@ -26,7 +28,7 @@ int	is_dead(t_philo *philo)
 
 void	message(char *message, t_philo *philo)
 {
-	struct timeval tv;
+	struct timeval	tv;
 	long			ms;
 
 	if (*philo->sync == -1)
@@ -41,18 +43,12 @@ void	message(char *message, t_philo *philo)
 
 void	death_message(t_philo *philo)
 {
-	struct timeval tv;
+	struct timeval	tv;
 	long			ms;
 
 	gettimeofday(&tv, NULL);
 	ms = ms_calc(&philo->start, &tv);
 	printf("%ld %d died\n", ms, philo->id);
-}
-
-void	free_everything(t_info *info)
-{
-	free(info->philo);
-	free(info->threads);
 }
 
 long	ms_calc(struct timeval *start, struct timeval *end)
@@ -70,4 +66,32 @@ long	ms_calc(struct timeval *start, struct timeval *end)
 	}
 	elapsed = (seconds * 1000) + (microseconds / 1000);
 	return (elapsed);
+}
+
+int	ft_atoi(const char *str)
+{
+	int	i;
+	int	res;
+	int	sign;
+
+	sign = 0;
+	res = 0;
+	i = 0;
+	while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t'
+		|| str[i] == '\f' || str[i] == '\r' || str[i] == '\v')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign++;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		res = res * 10 + (str[i] - '0');
+		i++;
+	}
+	if (sign == 1)
+		res = -res;
+	return (res);
 }

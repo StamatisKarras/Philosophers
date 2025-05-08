@@ -6,20 +6,20 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:00:27 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/07 11:52:14 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/08 12:46:43 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <string.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <unistd.h>
 
 typedef struct s_philo
 {
@@ -29,8 +29,8 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
-	struct			timeval start;
-	struct			timeval last_meal;
+	struct timeval	start;
+	struct timeval	last_meal;
 	int				*sync;
 	int				odd;
 	pthread_mutex_t	*print_lock;
@@ -58,15 +58,16 @@ void			create_threads(t_info *info);
 int				philoshophers(t_info *info, char *argv[]);
 void			parse_info_to_philo(char *argv[], t_info *info);
 void			*routine(void *arg);
-long	ms_calc(struct timeval *start, struct timeval *end);
-void	eat(t_philo *philo);
-void	actions(t_philo *philo);
-void	p_sleep(t_philo *philo);
-void	think(t_philo *philo);
-void	message(char *message, t_philo *philo);
-void	*monitor(void *arg);
-int	is_dead(t_philo *philo);
-void	death_message(t_philo *philo);
-void	free_everything(t_info *info);
-
+long			ms_calc(struct timeval *start, struct timeval *end);
+void			eat(t_philo *philo);
+void			actions(t_philo *philo);
+void			p_sleep(t_philo *philo);
+void			think(t_philo *philo);
+void			message(char *message, t_philo *philo);
+void			*monitor(void *arg);
+int				is_dead(t_philo *philo);
+void			death_message(t_philo *philo);
+void			free_everything(t_info *info);
+int				ft_atoi(const char *str);
+int				check_info(char *argv[], int n);
 #endif

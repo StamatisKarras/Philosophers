@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/07 12:22:46 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/08 13:03:35 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	*routine(void *arg)
 {
 	t_philo			*philo;
-	struct timeval 		tv;
+	struct timeval	tv;
 
 	philo = (t_philo *) arg;
 	while (philo->sync == 0)
@@ -56,9 +56,11 @@ void	*monitor(void *arg)
 void	actions(t_philo *philo)
 {
 	if (philo->id % 2 != 0 || philo->odd == 1)
-			think(philo);
-	while(1)
+		think(philo);
+	while (1)
 	{
+		if (philo->meals_eaten == philo->max_meals)
+			break ;
 		eat(philo);
 		p_sleep(philo);
 		think(philo);
