@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:17:51 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/08 11:52:06 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 10:43:30 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ void	create_threads(t_info *info)
 			(void *) &info->philo[i]);
 		i++;
 	}
+	pthread_mutex_lock(&info->sync_lock);
+	gettimeofday(&info->start, NULL);
 	info->sync = 1;
+	pthread_mutex_unlock(&info->sync_lock);
 	i = 0;
 	while (i < info->n_philo)
 	{

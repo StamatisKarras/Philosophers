@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:00:27 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/08 12:46:43 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 11:25:30 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ typedef struct s_philo
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				max_meals;
-	struct timeval	start;
+	struct timeval	*start;
 	struct timeval	last_meal;
 	int				*sync;
 	int				odd;
 	pthread_mutex_t	*print_lock;
+	pthread_mutex_t	*sync_lock;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
 }	t_philo;
@@ -41,10 +42,12 @@ typedef struct s_philo
 typedef struct s_info
 {
 	pthread_mutex_t	*locks;
+	pthread_mutex_t	sync_lock;
 	pthread_mutex_t	print_lock;
 	t_philo			*philo;
 	pthread_t		*threads;
 	pthread_t		all_seeing;
+	struct timeval	start;
 	int				n_philo;
 	int				sync;
 }	t_info;
@@ -70,4 +73,7 @@ void			death_message(t_philo *philo);
 void			free_everything(t_info *info);
 int				ft_atoi(const char *str);
 int				check_info(char *argv[], int n);
+int				ready(t_philo *philo);
+int				take_fork(t_philo *philo);
+
 #endif

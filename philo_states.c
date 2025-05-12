@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:07:02 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/08 13:13:47 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 11:51:12 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,61 @@
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left);
-	message("has taken a fork", philo);
-	if (philo->left == philo->right)
+	if (take_fork(philo) == -1)
 	{
-		pthread_mutex_unlock(philo->left);
+		usleep(philo->time_to_die * 1000);
 		return ;
 	}
-	pthread_mutex_lock(philo->right);
-	message("has taken a fork", philo);
+	pthread_mutex_lock(philo->sync_lock);
 	gettimeofday(&philo->last_meal, NULL);
-	pthread_mutex_lock(philo->print_lock);
-	message("is eating", philo);
-	pthread_mutex_unlock(philo->print_lock);
-	usleep(philo->time_to_eat * 1000);
 	philo->meals_eaten++;
+	pthread_mutex_unlock(philo->sync_lock);
+	message("is eating", philo);
+	usleep(philo->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
+	pthread_mutex_lock(philo->print_lock);
+	printf("%d dropped the forks\n", philo->id);
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 void	p_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(philo->print_lock);
 	message("is sleeping", philo);
-	pthread_mutex_unlock(philo->print_lock);
 	usleep(philo->time_to_sleep * 1000);
 }
 
 void	think(t_philo *philo)
 {
-	pthread_mutex_lock(philo->print_lock);
 	message("is thinking", philo);
-	pthread_mutex_unlock(philo->print_lock);
-	usleep(1);
+	usleep(1000);
+}
+
+int	take_fork(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->right);
+		message("has taken a fork", philo);
+		if (philo->left == philo->right)
+		{
+			pthread_mutex_unlock(philo->right);
+			return (-1);
+		}
+		pthread_mutex_lock(philo->left);
+		message("has taken a fork", philo);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->left);
+		message("has taken a fork", philo);
+		if (philo->left == philo->right)
+		{
+			pthread_mutex_unlock(philo->left);
+			return (-1);
+		}
+		pthread_mutex_lock(philo->right);
+		message("has taken a fork", philo);
+	}
+	return (0);
 }

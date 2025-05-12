@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:09:12 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/08 13:19:04 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 10:45:34 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,20 @@ int	is_dead(t_philo *philo)
 	long			ms;
 	struct timeval	tv;
 
+	pthread_mutex_lock(philo->sync_lock);
 	if (philo->meals_eaten == philo->max_meals)
+	{
+		pthread_mutex_unlock(philo->sync_lock);
 		return (0);
+	}
 	gettimeofday(&tv, NULL);
 	ms = ms_calc(&philo->last_meal, &tv);
 	if (ms >= philo->time_to_die)
+	{
+		pthread_mutex_unlock(philo->sync_lock);
 		return (-1);
+	}
+	pthread_mutex_unlock(philo->sync_lock);
 	return (0);
 }
 
@@ -31,14 +39,16 @@ void	message(char *message, t_philo *philo)
 	struct timeval	tv;
 	long			ms;
 
-	if (*philo->sync == -1)
+	pthread_mutex_lock(philo->print_lock);
+	if (ready(philo) == -1)
 	{
 		pthread_mutex_unlock(philo->print_lock);
 		return ;
 	}
 	gettimeofday(&tv, NULL);
-	ms = ms_calc(&philo->start, &tv);
+	ms = ms_calc(philo->start, &tv);
 	printf("%ld %d %s\n", ms, philo->id, message);
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 void	death_message(t_philo *philo)
@@ -46,9 +56,11 @@ void	death_message(t_philo *philo)
 	struct timeval	tv;
 	long			ms;
 
+	pthread_mutex_lock(philo->print_lock);
 	gettimeofday(&tv, NULL);
-	ms = ms_calc(&philo->start, &tv);
+	ms = ms_calc(philo->start, &tv);
 	printf("%ld %d died\n", ms, philo->id);
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 long	ms_calc(struct timeval *start, struct timeval *end)

@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/08 13:03:35 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 11:30:29 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 void	*routine(void *arg)
 {
 	t_philo			*philo;
-	struct timeval	tv;
 
 	philo = (t_philo *) arg;
-	while (philo->sync == 0)
-		usleep(0);
-	gettimeofday(&tv, NULL);
+	while (ready(philo) == 0)
+		usleep(5);
+	pthread_mutex_lock(philo->sync_lock);
 	gettimeofday(&philo->last_meal, NULL);
-	philo->start = tv;
+	pthread_mutex_unlock(philo->sync_lock);
 	actions(philo);
 	return (NULL);
 }
@@ -34,21 +33,22 @@ void	*monitor(void *arg)
 
 	i = 0;
 	info = (t_info *) arg;
-	while (info->sync == 0)
-		usleep(0);
+	while (ready(&info->philo[0]) == 0)
+		usleep(5);
 	usleep(2 * 1000);
 	while (1)
 	{
-		if (i == info->n_philo - 1)
+		if (i == info->n_philo)
 			i = 0;
 		if (is_dead(&info->philo[i]) == -1)
 		{
+			pthread_mutex_lock(&info->sync_lock);
 			info->sync = -1;
-			pthread_mutex_lock(&info->print_lock);
+			pthread_mutex_unlock(&info->sync_lock);
 			death_message(&info->philo[i]);
-			pthread_mutex_unlock(&info->print_lock);
 			break ;
 		}
+		i++;
 	}
 	return (NULL);
 }
@@ -59,12 +59,34 @@ void	actions(t_philo *philo)
 		think(philo);
 	while (1)
 	{
-		if (philo->meals_eaten == philo->max_meals)
-			break ;
 		eat(philo);
 		p_sleep(philo);
 		think(philo);
-		if (*philo->sync == -1)
+		pthread_mutex_lock(philo->sync_lock);
+		if (philo->meals_eaten == philo->max_meals)
+		{
+			pthread_mutex_unlock(philo->sync_lock);
+			break ;
+		}
+		pthread_mutex_unlock(philo->sync_lock);
+		if (ready(philo) == -1)
 			break ;
 	}
+}
+
+int	ready(t_philo *philo)
+{
+	pthread_mutex_lock(philo->sync_lock);
+	if (*philo->sync == 1)
+	{
+		pthread_mutex_unlock(philo->sync_lock);
+		return (1);
+	}
+	else if (*philo->sync == -1)
+	{
+		pthread_mutex_unlock(philo->sync_lock);
+		return (-1);
+	}
+	pthread_mutex_unlock(philo->sync_lock);
+	return (0);
 }
