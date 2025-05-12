@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:07:02 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/12 11:51:12 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/12 12:08:08 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	eat(t_philo *philo)
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
 	pthread_mutex_lock(philo->print_lock);
-	printf("%d dropped the forks\n", philo->id);
 	pthread_mutex_unlock(philo->print_lock);
 }
 
