@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/12 11:30:29 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/13 10:22:27 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	*monitor(void *arg)
 	while (ready(&info->philo[0]) == 0)
 		usleep(5);
 	usleep(2 * 1000);
-	while (1)
+	while (1) //Maybe do while(locks) or  while (philos) so that when my program frees everything the monitoring thread stops.
 	{
 		if (i == info->n_philo)
 			i = 0;
