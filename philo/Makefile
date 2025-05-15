@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 NAME = philo
 
 SRC = main.c \
@@ -8,7 +8,8 @@ SRC = main.c \
 	  philo_states.c \
 	  helper.c \
 	  assign_parse.c \
-	  free.c
+	  free.c \
+	  extra_helpers.c
 OBJ = $(SRC:.c=.o)
 
 .SILENT:

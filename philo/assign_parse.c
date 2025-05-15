@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 11:45:16 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/12 11:14:44 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/15 10:25:23 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	parse_info_to_philo(char *argv[], t_info *info)
 		info->philo[i].time_to_sleep = ft_atoi(argv[4]);
 		info->philo[i].sync = &info->sync;
 		info->philo[i].start = &info->start;
+		info->philo[i].started = 0;
 		if (i == info->n_philo - 1 && info->n_philo % 2 != 0)
 			info->philo[i].odd = 1;
 		else

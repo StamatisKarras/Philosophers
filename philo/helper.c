@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 10:09:12 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/12 10:45:34 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/15 10:12:28 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,13 @@ void	message(char *message, t_philo *philo)
 	struct timeval	tv;
 	long			ms;
 
-	pthread_mutex_lock(philo->print_lock);
 	if (ready(philo) == -1)
-	{
-		pthread_mutex_unlock(philo->print_lock);
 		return ;
-	}
+	pthread_mutex_lock(philo->sync_lock);
 	gettimeofday(&tv, NULL);
 	ms = ms_calc(philo->start, &tv);
 	printf("%ld %d %s\n", ms, philo->id, message);
-	pthread_mutex_unlock(philo->print_lock);
+	pthread_mutex_unlock(philo->sync_lock);
 }
 
 void	death_message(t_philo *philo)
@@ -56,11 +53,11 @@ void	death_message(t_philo *philo)
 	struct timeval	tv;
 	long			ms;
 
-	pthread_mutex_lock(philo->print_lock);
+	pthread_mutex_lock(philo->sync_lock);
 	gettimeofday(&tv, NULL);
 	ms = ms_calc(philo->start, &tv);
 	printf("%ld %d died\n", ms, philo->id);
-	pthread_mutex_unlock(philo->print_lock);
+	pthread_mutex_unlock(philo->sync_lock);
 }
 
 long	ms_calc(struct timeval *start, struct timeval *end)

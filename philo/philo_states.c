@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:07:02 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/12 12:08:08 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/15 09:40:38 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void	eat(t_philo *philo)
 	usleep(philo->time_to_eat * 1000);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
-	pthread_mutex_lock(philo->print_lock);
-	pthread_mutex_unlock(philo->print_lock);
 }
 
 void	p_sleep(t_philo *philo)

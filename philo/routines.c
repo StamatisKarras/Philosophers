@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/14 12:19:14 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/15 10:21:08 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ void	*routine(void *arg)
 	philo = (t_philo *) arg;
 	while (ready(philo) == 0)
 		usleep(5);
-	pthread_mutex_lock(philo->print_lock);
+	pthread_mutex_lock(philo->sync_lock);
+	philo->started = 1;
 	gettimeofday(&philo->last_meal, NULL);
-	pthread_mutex_unlock(philo->print_lock);
+	pthread_mutex_unlock(philo->sync_lock);
 	actions(philo);
 	return (NULL);
 }
@@ -33,6 +34,7 @@ void	*monitor(void *arg)
 
 	i = 0;
 	info = (t_info *) arg;
+	should_start(info);
 	while (1)
 	{
 		check_quit(info);
@@ -70,30 +72,4 @@ void	actions(t_philo *philo)
 		if (ready(philo) == -1)
 			break ;
 	}
-}
-
-int	ready(t_philo *philo)
-{
-	pthread_mutex_lock(philo->sync_lock);
-	if (*philo->sync == 1)
-	{
-		pthread_mutex_unlock(philo->sync_lock);
-		return (1);
-	}
-	else if (*philo->sync == -1)
-	{
-		pthread_mutex_unlock(philo->sync_lock);
-		return (-1);
-	}
-	pthread_mutex_unlock(philo->sync_lock);
-	return (0);
-}
-
-int	check_quit(t_info *info)
-{
-	pthread_mutex_lock(&info->sync_lock);
-	if (info->sync == 2)
-		return (-1);
-	pthread_mutex_unlock(&info->sync_lock);
-	return (0);
 }

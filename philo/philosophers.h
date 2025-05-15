@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:00:27 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/14 10:45:17 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/15 09:57:14 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 	pthread_mutex_t	*sync_lock;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
+	int				started;
 }	t_philo;
 
 typedef struct s_info
@@ -76,5 +77,5 @@ int				check_info(char *argv[], int n);
 int				ready(t_philo *philo);
 int				take_fork(t_philo *philo);
 int				check_quit(t_info *info);
-
+void			should_start(t_info *info);
 #endif
