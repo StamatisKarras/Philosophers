@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 09:06:29 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/15 10:27:05 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/16 14:34:28 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,6 @@ int	main(int argc, char *argv[])
 
 	if (argc == 5 || argc == 6)
 	{
-		if (ft_atoi(argv[1]) > 9000)
-		{
-			write(2, "The table is overpopulated\n", 28);
-			return (-1);
-		}
 		if (check_info(argv, argc) == -1)
 		{
 			write(2, "ERROR\n", 6);
@@ -66,5 +61,7 @@ int	main(int argc, char *argv[])
 			return (-1);
 		}
 	}
+	else
+		write(2, "ERROR\n", 6);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 09:17:51 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/15 09:50:58 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/16 15:21:41 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,14 @@ void	create_threads(t_info *info)
 	int				i;
 
 	i = 0;
-	info->sync = 0;
 	while (i < info->n_philo)
 	{
-		pthread_create(&info->threads[i], NULL, &routine,
-			(void *) &info->philo[i]);
+		if (pthread_create(&info->threads[i], NULL, &routine,
+				(void *) &info->philo[i]) != 0)
+		{
+			stop_error(i - 1, info);
+			return ;
+		}
 		i++;
 	}
 	pthread_mutex_lock(&info->sync_lock);

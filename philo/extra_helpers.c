@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:17:45 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/15 10:18:27 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/16 16:17:04 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,43 @@ int	ready(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->sync_lock);
 	return (0);
+}
+
+int	check_if_not_num(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (-1);
+		i++;
+	}
+	return (0);
+}
+
+void	custom_sleep(long time, t_philo *philo)
+{
+	struct timeval	start;
+	struct timeval	end;
+	long			time_passed;
+
+	time_passed = 0;
+	gettimeofday(&start, NULL);
+	while (1)
+	{
+		gettimeofday(&end, NULL);
+		time_passed = ms_calc(&start, &end);
+		if (time_passed >= time)
+			break ;
+		usleep(1000);
+		pthread_mutex_lock(philo->sync_lock);
+		if (*philo->sync == -1)
+		{
+			pthread_mutex_unlock(philo->sync_lock);
+			return ;
+		}
+		pthread_mutex_unlock(philo->sync_lock);
+	}
 }

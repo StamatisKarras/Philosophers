@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/15 10:21:08 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/16 15:58:47 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,12 @@ void	*routine(void *arg)
 
 	philo = (t_philo *) arg;
 	while (ready(philo) == 0)
-		usleep(5);
+	{
+		pthread_mutex_lock(philo->sync_lock);
+		if (*philo->error == 1)
+			return (NULL);
+		pthread_mutex_unlock(philo->sync_lock);
+	}
 	pthread_mutex_lock(philo->sync_lock);
 	philo->started = 1;
 	gettimeofday(&philo->last_meal, NULL);
@@ -55,7 +60,7 @@ void	*monitor(void *arg)
 
 void	actions(t_philo *philo)
 {
-	if (philo->id % 2 != 0 || philo->odd == 1)
+	if (philo->id % 2 != 0)
 		think(philo);
 	while (1)
 	{

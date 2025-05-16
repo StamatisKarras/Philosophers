@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:07:02 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/15 09:40:38 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/16 16:11:51 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	eat(t_philo *philo)
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->sync_lock);
 	message("is eating", philo);
-	usleep(philo->time_to_eat * 1000);
+	custom_sleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(philo->right);
 }
@@ -32,7 +32,7 @@ void	eat(t_philo *philo)
 void	p_sleep(t_philo *philo)
 {
 	message("is sleeping", philo);
-	usleep(philo->time_to_sleep * 1000);
+	custom_sleep(philo->time_to_sleep, philo);
 }
 
 void	think(t_philo *philo)
