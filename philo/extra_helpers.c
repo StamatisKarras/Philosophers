@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:17:45 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/16 16:17:04 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/19 09:56:26 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	should_start(t_info *info)
 		i = 0;
 		while (i < n_philo)
 		{
+			usleep(1000);
 			pthread_mutex_lock(&info->sync_lock);
 			if (info->philo[i].started == 1)
 			{

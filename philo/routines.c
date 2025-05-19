@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/19 09:54:36 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/19 10:01:36 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	*monitor(void *arg)
 	should_start(info);
 	while (1)
 	{
+		usleep(1000);
 		check_quit(info);
 		if (i == info->n_philo)
 			i = 0;
