@@ -6,7 +6,7 @@
 /*   By: skarras <skarras@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:01:01 by skarras           #+#    #+#             */
-/*   Updated: 2025/05/16 15:58:47 by skarras          ###   ########.fr       */
+/*   Updated: 2025/05/19 09:54:36 by skarras          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	*routine(void *arg)
 	philo = (t_philo *) arg;
 	while (ready(philo) == 0)
 	{
+		usleep(1000);
 		pthread_mutex_lock(philo->sync_lock);
 		if (*philo->error == 1)
 			return (NULL);
